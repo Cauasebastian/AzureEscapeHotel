@@ -1,4 +1,4 @@
 package org.sebastiandev.azureescapehotel.model;
 
-public class BookedRomm {
+public @interface AllArgConstructor {
 }
