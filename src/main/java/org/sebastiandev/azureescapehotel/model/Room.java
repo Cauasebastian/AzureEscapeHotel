@@ -8,6 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class Room {
     private String RoomType;
     private BigDecimal RoomPrice;
     private boolean isBooked = false;
+    @Lob
+    private Blob photo;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "room",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BookedRoom> bookings;
 
     public Room() {

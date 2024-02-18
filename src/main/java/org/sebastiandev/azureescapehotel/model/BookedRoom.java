@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class BookedRoom {
 
     @Id
@@ -22,12 +21,13 @@ public class BookedRoom {
 
     private Long bookingId;
 
+    @Column(name = "check_in_date")
     private LocalDate checkInDate;
 
-    @Column(name = "check_In")
+    @Column(name = "check_out_date")
     private LocalDate checkOutDate;
 
-    @Column(name = "guest_FullName")
+    @Column(name = "guest_full_name")
     private String guestFullName;
 
     @Column(name = "guest_email")
