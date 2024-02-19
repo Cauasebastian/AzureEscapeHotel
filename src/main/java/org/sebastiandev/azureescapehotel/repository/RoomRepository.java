@@ -1,4 +1,7 @@
 package org.sebastiandev.azureescapehotel.repository;
 
-public interface RoomRepository {
+import org.sebastiandev.azureescapehotel.model.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RoomRepository extends JpaRepository<Room, Long> {
 }
