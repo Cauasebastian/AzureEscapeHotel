@@ -12,7 +12,7 @@ const RoomTypeSelector = ({handleRoomInputChange, newRoom}) => {
         })
     },[])
 
-    const handleNewRoomTypeInputChange = () => {
+    const handleNewRoomTypeInputChange = (e) => {
         setNewRoomType(e.target.value);
     }
     const handleAddNewRoomType = () =>{
@@ -24,7 +24,7 @@ const RoomTypeSelector = ({handleRoomInputChange, newRoom}) => {
     }
 
   return (
-    
+    <>
     {roomTypes.length> 0 &&(
         <div>
             <select id='roomType'
@@ -34,7 +34,7 @@ const RoomTypeSelector = ({handleRoomInputChange, newRoom}) => {
                 if(e.target.value ==="Add New"){
                     setShowNewRoomTypesInput(true)
                 }else{
-                    handleNewRoomInputChange(e)
+                    handleRoomInputChange(e)
                 }
             }}>
                 <option value={""}>Select a room Type</option>
@@ -53,16 +53,13 @@ const RoomTypeSelector = ({handleRoomInputChange, newRoom}) => {
                           onChange={handleNewRoomTypeInputChange} 
                            /> 
                            <button className='btn btn-hotel' type='button' onClick={handleAddNewRoomType}>
-                           
+                           Add
                            </button>
-                         <div/>
+                         </div>
                     )}
         </div>
     )}
-    
-    
-    
-    
+    </>
   )
 }
 
