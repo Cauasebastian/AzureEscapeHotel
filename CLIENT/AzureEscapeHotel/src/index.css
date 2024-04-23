@@ -7,17 +7,17 @@ body {
 }
 
 /* Navigation bar definitions */
-.navbar{
+ .navbar{
   padding: 0;
-}
-.navbar .navbar-nav .nav-link{
+ }
+ .navbar .navbar-nav .nav-link{
   padding: 1em;
-}
-.navbar .navbar-nav .nav-item{
+ }
+ .navbar .navbar-nav .nav-item{
   position: relative;
-}
+ }
 
-.navbar .navbar-nav .nav-item::after{
+ .navbar .navbar-nav .nav-item::after{
   position: absolute;
   bottom: 0;
   left: 0;
@@ -28,11 +28,11 @@ body {
   margin: 0 auto;
   height: 4px;
   transition: all .5s;
-}
-.navbar .navbar-nav .nav-item:hover::after{
+ }
+ .navbar .navbar-nav .nav-item:hover::after{
   width: 100%;
-}
-.navbar-dark .navbar-nav .nav-link {
+ }
+ .navbar-dark .navbar-nav .nav-link {
   color: rgb(25, 24, 24);
 }
 
@@ -40,44 +40,44 @@ body {
   color: rgb(25, 24, 24);
 }
 
-@media screen and (min-width: 992px){
+ @media screen and (min-width: 992px){
   .navbar{
-    padding: 0;
-  }
-  .navbar .navbar-nav .nav-link{
-    padding: 1em 0;
-  }
-  .navbar .navbar-nav .nav-item{
-    margin: 0 1em;
-  }
-}
+  padding: 0;
+ }
+ .navbar .navbar-nav .nav-link{
+  padding: 1em 0;
+ }
+ .navbar .navbar-nav .nav-item{
+  margin: 0 1em;
+ }
+ }
 
-/* Hotel custom color */
-.btn-hotel{
+  /* Hotel custom color */
+ .btn-hotel{
   background-color: rgb(169, 77, 123);
   color: #fff;
-}
-.btn-hotel:hover{
+  }
+  .btn-hotel:hover{
   background-color: rgb(137, 127, 132);
   color: #fff;
   transition: 0.7s;
   outline-color: transparent;
   outline-style:solid;
 
-}
+  }
 
-.hotel-color{
-  color: rgb(169, 77, 123);
-}
-.room-price{
-  color:darkgoldenrod;
-  font-family: 'Courier New', Courier, monospace;
-  font-size:medium;
-}
-.vertical-rule{
-  border-left: '0.5px solid black';
-  height: '100vh'
-}
+  .hotel-color{
+    color: rgb(169, 77, 123);
+  }
+  .room-price{
+    color:darkgoldenrod;
+    font-family: 'Courier New', Courier, monospace;
+    font-size:medium;
+  }
+  .vertical-rule{
+    border-left: '0.5px solid black';
+    height: '100vh'
+  }
 
 
 
@@ -170,31 +170,31 @@ body {
   }
 }
 /* Header overlay */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.overlay-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  justify-content: flex-start;
-}
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+     transform: translate(-50%, -50%);
+    color: #fff;
+    justify-content: flex-start;
+  }
 
 /* The header banner */
 .header-banner {
   background-image:  url("./assets/images/services-1.jpg");
-  background-size: cover;
+   background-size: cover;
   background-position: center;
-  position: relative;
+   position: relative;
   height: 80vh;
-}
+ }
 
 .header-banner {
   position: relative;
@@ -213,7 +213,7 @@ body {
   }
 }
 
-.footer {
+ .footer {
   position: fixed;
   left: 0;
   bottom: 0;
