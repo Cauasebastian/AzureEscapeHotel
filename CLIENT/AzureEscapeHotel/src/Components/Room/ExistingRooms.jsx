@@ -1,11 +1,10 @@
-// ExistingRooms.jsx
 import React, { useEffect, useState } from 'react';
-import { getAllRooms, deleteRoom } from '../Utils/ApiFunctions'; // Ensure these paths are correct
-import RoomFilter from '../Common/RoomFilter'; // Ensure this path is correct
-import RoomPaginator from '../Common/RoomPaginator'; // Ensure this path is correct
-import { Col } from 'react-bootstrap'; // Ensure react-bootstrap is installed
-import { FaEdit, FaEye, FaTrashAlt } from 'react-icons/fa'; // Ensure react-icons/fa is installed
-import { Link } from 'react-router-dom'; // Ensure react-router-dom is installed
+import { getAllRooms, deleteRoom } from '../Utils/ApiFunctions'; // Certifique-se de que esses caminhos estão corretos
+import RoomFilter from '../Common/RoomFilter'; // Certifique-se de que esse caminho está correto
+import RoomPaginator from '../Common/RoomPaginator'; // Certifique-se de que esse caminho está correto
+import { Col } from 'react-bootstrap'; // Certifique-se de que react-bootstrap está instalado
+import { FaEdit, FaEye, FaTrashAlt } from 'react-icons/fa'; // Certifique-se de que react-icons/fa está instalado
+import { Link } from 'react-router-dom'; // Certifique-se de que react-router-dom está instalado
 
 const ExistingRooms = () => {
     const [rooms, setRooms] = useState([]);
@@ -84,7 +83,7 @@ const ExistingRooms = () => {
                         <h2>Existing Rooms</h2>
                     </div>
                     <Col mb={6} className="mb-3 mb-md-0">
-                        <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
+                        <RoomFilter data={rooms} setFiltered={setFilteredRooms} /> {/* Passando a prop correta */}
                     </Col>
                     <table className="table table-bordered table-hover">
                         <thead>
