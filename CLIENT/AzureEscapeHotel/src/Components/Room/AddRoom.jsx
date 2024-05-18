@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AddRoom as AddRoomAPI } from '../Utils/ApiFunctions';
+import {addRoom} from '../Utils/ApiFunctions';
 import RoomTypeSelector from '../Common/RoomTypeSelector';
 
 const AddRoom = () => {
@@ -35,7 +35,7 @@ const AddRoom = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const success = await AddRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice);
+            const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice);
             if (success !== undefined) {
                 setSuccessMessage("A new room was added to the database");
                 setNewRoom({ photo: null, roomType: "", roomPrice: "" });
@@ -50,7 +50,7 @@ const AddRoom = () => {
     };
 
     return (
-        <section className='container mt-05 mb-5'>
+        <section className='container, mt-05 mb-5'>
             <div className='row justify-content-center'>
                 <div className='col-md-8 col-lg-a6'>
                     <h2 className='mt-5 mb-2'>Add a New Room</h2>
@@ -61,11 +61,12 @@ const AddRoom = () => {
                                 Room Type
                             </label>
                             <div>
-                                <RoomTypeSelector handleRoomInputChange={handleRoomInputChange} newRoom={newRoom} />
+                                <RoomTypeSelector handleRoomInputChange={handleRoomInputChange}
+                                 newRoom={newRoom} />
                             </div>
                         </div>
                         <div className='mb-3'>
-                            <label htmlFor='roomPrice' className='form-label'>
+                        <label htmlFor='roomPrice' className='form-label'>
                                 Room Price
                             </label>
                             <input
@@ -97,7 +98,9 @@ const AddRoom = () => {
                             )}
                         </div>
                         <div className='d-grid d-md-flex mt-2'>
-                            <button className='btn btn-outline-primary ml-5'>
+                            <button className='btn btn-outline-primary ml-5'
+                            onClick={handleSubmit}
+                            >
                                 Save Room
                             </button>
 

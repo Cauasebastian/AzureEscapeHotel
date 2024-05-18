@@ -47,8 +47,8 @@ const RoomTypeSelector = ({handleRoomInputChange, newRoom}) => {
             </select>
                     {showNewRoomTypeInput && (
                         <div className='input-group'>
-                           <input type="text"
-                           className='form-control'
+                           <input className='form-control' 
+                           type="text"
                            placeholder='Enter a new room type'
                           onChange={handleNewRoomTypeInputChange} 
                            /> 
