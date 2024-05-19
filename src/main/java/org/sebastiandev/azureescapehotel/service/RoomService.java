@@ -1,6 +1,7 @@
 package org.sebastiandev.azureescapehotel.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sebastiandev.azureescapehotel.exception.InternalServerException;
 import org.sebastiandev.azureescapehotel.exception.ResourceNotFoundException;
 import org.sebastiandev.azureescapehotel.model.Room;
 import org.sebastiandev.azureescapehotel.repository.RoomRepository;
@@ -80,5 +81,30 @@ public class RoomService implements IRoomService {
         else{
             roomRepository.deleteById(roomId);
         }
+    }
+
+    @Override
+    public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
+    if(roomType != null){
+        room.setRoomType(roomType);
+    }
+    if(roomPrice != null){
+    room.setRoomPrice(roomPrice);
+    }
+    if (photoBytes != null && photoBytes.length > 0) {
+        try {
+            room.setPhoto(new SerialBlob(photoBytes));
+        } catch (SQLException e) {
+            throw new InternalServerException("Failed to update room photo", e);
+        }
+    }
+        return roomRepository.save(room);
+    }
+
+    @Override
+    public Optional<Room> getRoomById(Long roomId) {
+        return Optional.of(roomRepository.findById(roomId).get());
     }
 }

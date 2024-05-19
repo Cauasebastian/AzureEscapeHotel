@@ -51,17 +51,14 @@ const ExistingRooms = () => {
             const response = await deleteRoom(roomId);
             if (response === "") {
                 setSuccessMessage("Room deleted successfully");
-                fetchRooms();
+            
             } else {
                 setErrorMessage("Error deleting room");
             }
         } catch (error) {
             setErrorMessage(error.message);
         }
-        setTimeout(() => {
-            setSuccessMessage("");
-            setErrorMessage("");
-        }, 5000);
+        fetchRooms();
     };
 
     const calculateTotalPages = (filteredRooms, roomsPerPage, rooms) => {
