@@ -74,7 +74,7 @@ public class RoomController {
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
                                                    @RequestParam(required = false) BigDecimal roomPrice,
-                                                   @RequestParam(required = false) MultipartFile photo) throws IOException, SQLException {
+                                                   @RequestParam(required = false) MultipartFile photo) throws SQLException, IOException {
         byte[] photoBytes = (photo != null && !photo.isEmpty()) ?
                 photo.getBytes() : roomService.getRoomPhotoByRoomId(roomId);
 
@@ -82,6 +82,7 @@ public class RoomController {
         RoomResponse roomResponse = getRoomResponse(updatedRoom);
         return ResponseEntity.ok(roomResponse);
     }
+
     @GetMapping("/room/{roomId}")
     public ResponseEntity<RoomResponse> getRoomId(@PathVariable Long roomId) {
         Room room = roomService.getRoomById(roomId)

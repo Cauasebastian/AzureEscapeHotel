@@ -3,7 +3,7 @@ import { updateRoom, getRoomById } from '../Utils/ApiFunctions';
 import { useParams, Link } from 'react-router-dom';
 
 const EditRoom = () => {
-  const [Room, setRoom] = useState({
+  const [room, setRoom] = useState({
     photo: null,
     roomType: "",
     roomPrice: ""
@@ -17,44 +17,57 @@ const EditRoom = () => {
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
-    setRoom({ ...Room, photo: selectedImage });
-    setImagePreview(URL.createObjectURL(selectedImage));
+    setRoom({ ...room, photo: selectedImage });
+
+    // Usando FileReader para ler a imagem e definir a pré-visualização
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    if (selectedImage) {
+      reader.readAsDataURL(selectedImage);
+    } else {
+      setImagePreview("");
+    }
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setRoom({ ...Room, [name]: value });
+    setRoom({ ...room, [name]: value });
   }
 
   useEffect(() => {
     const fetchRoom = async () => {
       try {
         const roomData = await getRoomById(roomId);
-        setRoom(roomData);
-        setImagePreview(roomData.photo);
+        setRoom({
+          ...roomData,
+          photo: null // Evitar problemas com a visualização da imagem
+        });
+        setImagePreview(`data:image/jpeg;base64,${roomData.photo}`);
       } catch (error) {
         console.error(error);
       }
-    };
+    }
     fetchRoom();
   }, [roomId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await updateRoom(roomId, Room);
-      if (response.status === 200) {
-        setSuccessMessage("Room updated successfully");
-        const updatedRoomData = await getRoomById(roomId);
-        setRoom(updatedRoomData);
-        setImagePreview(updatedRoomData.photo);
-        setErrorMessage("");
-      } else {
-        setErrorMessage("Error adding room");
-      }
+        const response = await updateRoom(roomId, room);
+        if (response.status === 200) {
+            setSuccessMessage("Room updated successfully");
+            const updatedRoomData = await getRoomById(roomId);
+            setRoom(updatedRoomData);
+            setImagePreview(`data:image/jpeg;base64,${updatedRoomData.photo}`);
+            setErrorMessage("");
+        } else {
+            setErrorMessage("Error updating room");
+        }
     } catch (error) {
-      console.log(error);
-      setErrorMessage(error.message);
+        console.log(error);
+        setErrorMessage(error.message);
     }
   }
 
@@ -78,7 +91,7 @@ const EditRoom = () => {
                 className='form-control'
                 id='roomType'
                 name='roomType'
-                value={Room.roomType}
+                value={room.roomType}
                 onChange={handleInputChange}
               />
             </div>
@@ -92,7 +105,7 @@ const EditRoom = () => {
                 id="roomPrice"
                 type='number'
                 name='roomPrice'
-                value={Room.roomPrice}
+                value={room.roomPrice}
                 onChange={handleInputChange}
               />
             </div>
