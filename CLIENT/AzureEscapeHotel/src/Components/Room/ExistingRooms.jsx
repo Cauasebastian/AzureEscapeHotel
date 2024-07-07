@@ -6,6 +6,7 @@ import { Col } from 'react-bootstrap'; // Certifique-se de que react-bootstrap e
 import { FaEdit, FaEye, FaPlus, FaTrashAlt } from 'react-icons/fa'; // Certifique-se de que react-icons/fa está instalado
 import { Link } from 'react-router-dom'; // Certifique-se de que react-router-dom está instalado
 import { FaP } from 'react-icons/fa6';
+import { Row } from 'react-bootstrap';
 
 const ExistingRooms = () => {
     const [rooms, setRooms] = useState([]);
@@ -73,20 +74,28 @@ const ExistingRooms = () => {
 
     return (
         <>
+        <div className= " container col-md-8 col-lg-6 col-xl-4">
+            {successMessage && <p className="alert alert-success">{successMessage}</p>}
+            {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
+        </div>
             {isLoading ? (
                 <p>Loading existing Rooms...</p>
             ) : (
                 <section className="mt-5 mb-5 container">
-                    <div className="d-flex justify-content-center mb-3 mt-5">
+                    <div className="d-flex justify-content-between mb-3 mt-5">
                         <h2>Existing Rooms</h2>
-                        <Link to="/add-room" >
-                            <FaPlus /> Add Room 
-                        </Link>
                     </div>
-                    <Col mb={6} className="mb-3 mb-md-0">
+                    <Row >
+                    <Col md={6} className="mb-3 mb-md-0">
                         <RoomFilter data={rooms} setFiltered={setFilteredRooms} /> {/* Passando a prop correta */}
                     </Col>
-                    <table className="table table-bordered table-hover">
+                    <Col  md={6} className="d-flex justify-content-end">
+                        <Link to="/add-room">
+                            <FaPlus /> Add Room
+                        </Link>
+                    </Col>
+                    </Row>
+                              <table className="table table-bordered table-hover">
                         <thead>
                             <tr className="text-center">
                                 <th>ID</th>

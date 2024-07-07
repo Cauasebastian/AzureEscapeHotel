@@ -84,11 +84,13 @@ public class RoomController {
     }
 
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<RoomResponse> getRoomId(@PathVariable Long roomId) {
-        Room room = roomService.getRoomById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
-        RoomResponse roomResponse = getRoomResponse(room);
-        return ResponseEntity.ok(roomResponse);
+    public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId) {
+        Optional<Room> theroom = roomService.getRoomById(roomId);
+        if (theroom.isEmpty()) {
+            throw new ResourceNotFoundException("Room not found with id: " + roomId);
+        }
+        RoomResponse roomResponse = getRoomResponse(theroom.get());
+        return ResponseEntity.ok(Optional.of(roomResponse));
     }
 
     private RoomResponse getRoomResponse(Room room) {
