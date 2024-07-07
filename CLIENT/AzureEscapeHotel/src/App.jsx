@@ -7,19 +7,27 @@ import AddRoom from './Components/Room/AddRoom';
 import ExistingRooms from './Components/Room/ExistingRooms';
 import EditRoom from './Components/Room/EditRoom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+import NavBar from './Components/layout/NavBar';
+import Footer from './Components/layout/Footer';
 
 function App() {
   return (
+    <>
+    <main>
     <Router>
-      <main>
+      <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/existing-rooms" element={<ExistingRooms />} />
           <Route path="/edit-room/:roomId" element={<EditRoom />} />
           <Route path="/add-room" element={<AddRoom />} />
         </Routes>
-      </main>
+        <Footer />
     </Router>
+      </main>
+    </>
+    
   );
 }
 
