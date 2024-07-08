@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import NavBar from './Components/layout/NavBar';
 import Footer from './Components/layout/Footer';
+import RoomListing from './Components/Room/RoomListing';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/existing-rooms" element={<ExistingRooms />} />
           <Route path="/edit-room/:roomId" element={<EditRoom />} />
           <Route path="/add-room" element={<AddRoom />} />
+          <Route path="/browse-all-rooms" element={<RoomListing />} />
         </Routes>
         <Footer />
     </Router>
