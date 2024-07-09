@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {addRoom} from '../Utils/ApiFunctions';
+import { addRoom } from '../Utils/ApiFunctions';
 import RoomTypeSelector from '../Common/RoomTypeSelector';
 import { Link } from 'react-router-dom';
 
@@ -37,7 +37,7 @@ const AddRoom = () => {
         e.preventDefault();
         try {
             const success = await addRoom(newRoom.photo, newRoom.roomType, newRoom.roomPrice);
-            if (success !== undefined) {
+            if (success) {
                 setSuccessMessage("A new room was added to the database");
                 setNewRoom({ photo: null, roomType: "", roomPrice: "" });
                 setImagePreview("");
@@ -48,16 +48,16 @@ const AddRoom = () => {
         } catch (error) {
             setErrorMessage(error.message);
         }
-        setTimeout (() => {
+        setTimeout(() => {
             setSuccessMessage("");
             setErrorMessage("");
         }, 5000);
     };
 
     return (
-        <section className='container, mt-05 mb-5'>
+        <section className='container mt-5 mb-5'>
             <div className='row justify-content-center'>
-                <div className='col-md-8 col-lg-a6'>
+                <div className='col-md-8 col-lg-6'>
                     <h2 className='mt-5 mb-2'>Add a New Room</h2>
                     {successMessage && (
                         <div className='alert alert-success fade show'>{successMessage}</div>
@@ -71,12 +71,11 @@ const AddRoom = () => {
                                 Room Type
                             </label>
                             <div>
-                                <RoomTypeSelector handleRoomInputChange={handleRoomInputChange}
-                                 newRoom={newRoom} />
+                                <RoomTypeSelector handleRoomInputChange={handleRoomInputChange} newRoom={newRoom} />
                             </div>
                         </div>
                         <div className='mb-3'>
-                        <label htmlFor='roomPrice' className='form-label'>
+                            <label htmlFor='roomPrice' className='form-label'>
                                 Room Price
                             </label>
                             <input
@@ -88,20 +87,22 @@ const AddRoom = () => {
                                 value={newRoom.roomPrice}
                                 onChange={handleRoomInputChange}
                             />
-
                         </div>
                         <div className='mb-3'>
                             <label htmlFor='photo' className='form-label'>
                                 Room Photo
                             </label>
-                            <input className='form-control'
+                            <input
+                                className='form-control'
                                 id='photo'
                                 name='photo'
                                 type='file'
                                 onChange={handleImageChange}
                             />
                             {imagePreview && (
-                                <img src={imagePreview} alt="Preview Room Photo"
+                                <img
+                                    src={imagePreview}
+                                    alt="Preview Room Photo"
                                     style={{ maxWidth: "400px", maxHeight: "400px" }}
                                     className='mb-3'
                                 />
@@ -109,16 +110,12 @@ const AddRoom = () => {
                         </div>
                         <div className='d-grid d-md-flex mt-2'>
                             <Link to='/existing-rooms' className='btn btn-outline-info ml-5'>
-                                Cancel 
+                                Cancel
                             </Link>
-                            <button className='btn btn-outline-primary ml-5'
-                            onClick={handleSubmit}
-                            >
+                            <button className='btn btn-outline-primary ml-5' type='submit'>
                                 Save Room
                             </button>
-
                         </div>
-
                     </form>
                 </div>
             </div>

@@ -41,9 +41,8 @@ public class RoomController {
         Room savedRoom = roomService.addNewRoom(photo, roomType, roomPrice);
         RoomResponse response = new RoomResponse(savedRoom.getId(), savedRoom.getRoomType(),
                 savedRoom.getRoomPrice());
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
     @GetMapping("/room-types")
     public List<String> getRoomTypes() {
         return roomService.getAllRoomTypes();
