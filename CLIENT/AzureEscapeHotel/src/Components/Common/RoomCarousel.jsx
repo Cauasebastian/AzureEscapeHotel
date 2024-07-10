@@ -55,7 +55,7 @@ const RoomCarousel = () => {
                         </Link>
                         <Card.Body>
                           <Card.Title className='hotel-color'>{room.roomType}</Card.Title>
-                          <Card.Title className='room-price'>{room.roomPrice}</Card.Title>
+                          <Card.Title className='room-price'>${room.roomPrice} / night</Card.Title>
                           <div className='flex-shrink-0'>
                             <Link className='btn btn-sm btn-hotel' to={`/book-room/${room.id}`}>
                               View/Book Now
