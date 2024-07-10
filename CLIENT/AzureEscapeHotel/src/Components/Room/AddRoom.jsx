@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { addRoom } from '../Utils/ApiFunctions';
 import RoomTypeSelector from '../Common/RoomTypeSelector';
 import { Link } from 'react-router-dom';
+import imageCompression from 'browser-image-compression';
 
 const AddRoom = () => {
     const [newRoom, setNewRoom] = useState({
@@ -27,10 +28,24 @@ const AddRoom = () => {
         setNewRoom({ ...newRoom, [name]: value });
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const selectedImage = e.target.files[0];
-        setNewRoom({ ...newRoom, photo: selectedImage });
-        setImagePreview(URL.createObjectURL(selectedImage));
+        
+        // Comprimir a imagem antes de configurar no estado
+        try {
+            const options = {
+                maxSizeMB: 5, // Tamanho máximo desejado em MB
+                maxWidthOrHeight: 1920, // Resolução máxima desejada
+                useWebWorker: true,
+            };
+            
+            const compressedImage = await imageCompression(selectedImage, options);
+            setNewRoom({ ...newRoom, photo: compressedImage });
+            setImagePreview(URL.createObjectURL(compressedImage));
+        } catch (error) {
+            console.error('Erro ao comprimir a imagem:', error);
+            setErrorMessage('Erro ao comprimir a imagem');
+        }
     };
 
     const handleSubmit = async (e) => {
