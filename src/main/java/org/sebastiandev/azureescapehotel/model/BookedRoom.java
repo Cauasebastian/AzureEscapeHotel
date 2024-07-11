@@ -66,4 +66,8 @@ public class BookedRoom {
     public void setBookingConfirmationCode(String bookingConfirmationCode) {
         this.bookingConfirmationCode = bookingConfirmationCode;
     }
+
+    public String getConfirmationCode() {
+        return bookingConfirmationCode;
+    }
 }
