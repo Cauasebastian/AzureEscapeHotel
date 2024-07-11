@@ -12,6 +12,8 @@ import NavBar from './Components/layout/NavBar';
 import Footer from './Components/layout/Footer';
 import RoomListing from './Components/Room/RoomListing';
 import Admin from './Components/admin/Admin';
+import Checkout from './Components/booking/Checkout';
+import BookingForm from './Components/booking/BookingForm';
 
 
 function App() {
@@ -25,6 +27,7 @@ function App() {
           <Route path="/existing-rooms" element={<ExistingRooms />} />
           <Route path="/edit-room/:roomId" element={<EditRoom />} />
           <Route path="/add-room" element={<AddRoom />} />
+          <Route path="/book-room/:roomId" element={<BookingForm />} />
           <Route path="/browse-all-rooms" element={<RoomListing />} />
           <Route path="/admin" element={<Admin/>} />
         </Routes>
