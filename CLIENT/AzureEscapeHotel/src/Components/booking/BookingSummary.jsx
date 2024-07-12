@@ -1,34 +1,33 @@
-import { Button } from 'bootstrap'
-import moment from 'moment'
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap'; // Importação correta do Button
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
-const BookingSummary = ({booking,payment,isFormValid,onConfirm}) => {
-    const checkInDate = moment(booking.checkInDate)
-    const checkOutDate = moment(booking.checkOutDate)
-    const numOfDays = checkOutDate.diff(checkInDate, 'days')
-    const[isBookingConfirmed, setIsBookingConfirmed] = useState(false)
-    const[isProcessingPayment, setIsProcessingPayment] = useState(false)
-
-    const navigate  = useNavigate()
+const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
+    const checkInDate = moment(booking.checkInDate);
+    const checkOutDate = moment(booking.checkOutDate);
+    const numOfDays = checkOutDate.diff(checkInDate, 'days');
+    const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+    const navigate = useNavigate();
 
     const handleConfirmBooking = async () => {
-        setIsProcessingPayment(true)
+        setIsProcessingPayment(true);
         setTimeout(() => {
-            setIsProcessingPayment(false)
-            setIsBookingConfirmed(true)
-            onConfirm()
-        }, 3000)
-    }
-    useEffect(() => {
-        if(isBookingConfirmed){
-            navigate('/booking-success')
-        }
-    }, [isBookingConfirmed, navigate])
+            setIsProcessingPayment(false);
+            setIsBookingConfirmed(true);
+            onConfirm();
+        }, 3000);
+    };
 
-  return (
-    <div className='card card-body mt-5'>
+    useEffect(() => {
+        if (isBookingConfirmed) {
+            navigate('/booking-success');
+        }
+    }, [isBookingConfirmed, navigate]);
+
+    return (
+        <div className='card card-body mt-5'>
             <h4>Reservation Summary</h4>
             <p>FullName: <strong>{booking.guestName}</strong></p>
             <p>Email: <strong>{booking.guestEmail}</strong></p>
@@ -37,8 +36,8 @@ const BookingSummary = ({booking,payment,isFormValid,onConfirm}) => {
             <p>Number of Days: <strong>{numOfDays}</strong></p>
             <div>
                 <h5>Number of Guests</h5>
-                <p>Adults: <strong>{booking.numberOfAdults > 1 ? "s" : ""} : {booking.numberOfAdults}</strong></p>
-                <p>Children: <strong>{booking.numberOfChildren}</strong></p>  
+                <p>Adults: <strong>{booking.numberOfAdults}</strong>{booking.numberOfAdults > 1 ? "s" : ""}</p>
+                <p>Children: <strong>{booking.numberOfChildren}</strong></p>
             </div>
             {payment > 0 ? (
                 <>
