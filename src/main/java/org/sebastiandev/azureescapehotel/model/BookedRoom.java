@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.sebastiandev.azureescapehotel.model.Room;
 
 import java.time.LocalDate;
 
@@ -49,6 +50,10 @@ public class BookedRoom {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    public BookedRoom(String bookingConfirmationCode) {
+        this.bookingConfirmationCode = bookingConfirmationCode;
+    }
+
     public void calculateTotalNumberOfGuest() {
         this.totalNumOfGuest = numOfAdults + numOfChildren;
     }
@@ -61,13 +66,5 @@ public class BookedRoom {
     public void setNumOfChildren(int numOfChildren) {
         this.numOfChildren = numOfChildren;
         calculateTotalNumberOfGuest();
-    }
-
-    public void setBookingConfirmationCode(String bookingConfirmationCode) {
-        this.bookingConfirmationCode = bookingConfirmationCode;
-    }
-
-    public String getConfirmationCode() {
-        return bookingConfirmationCode;
     }
 }

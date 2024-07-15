@@ -6,6 +6,7 @@ import org.sebastiandev.azureescapehotel.model.BookedRoom;
 import org.sebastiandev.azureescapehotel.model.Room;
 import org.sebastiandev.azureescapehotel.repository.BookingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class BookingService implements IbookingService {
         bookingRepository.deleteById(bookingId);
     }
 
+    @Transactional
     @Override
     public String saveBooking(Long roomId, BookedRoom bookingRequest) {
         if(bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())){
@@ -45,7 +47,7 @@ public class BookingService implements IbookingService {
         else{
             throw new InvalidBookingRequestException("Room is not available for the requested dates");
         }
-        return bookingRequest.getConfirmationCode();
+        return bookingRequest.getBookingConfirmationCode();
     }
 
     @Override

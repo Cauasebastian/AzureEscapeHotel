@@ -52,7 +52,15 @@ const BookingForm = () => {
     };
 
     useEffect(() => {
-        getRoomPriceById(roomId);
+        const fetchRoomData = async () => {
+            try {
+                const room = await getRoomById(roomId);
+                setRoomPrice(room.roomPrice);
+            } catch (error) {
+                setErrorMessage(error.message);
+            }
+        };
+        fetchRoomData();
     }, [roomId]);
 
     // Function to calculate payment based on dates and room price
@@ -103,7 +111,6 @@ const BookingForm = () => {
                 setErrorMessage(error.message);
                 console.error(`handleSubmit error: ${error.message}`);
             }
-
         }
         setIsValidated(true);
     };
@@ -111,16 +118,29 @@ const BookingForm = () => {
     // Function to handle booking
     const handleBooking = async () => {
         try {
-            const confirmationCode = await bookRoom(roomId, booking);
+            const bookingData = {
+                guestFullName: booking.guestName,
+                guestEmail: booking.guestEmail,
+                checkInDate: booking.checkInDate,
+                checkOutDate: booking.checkOutDate,
+                numOfAdults: parseInt(booking.numberOfAdults),
+                numOfChildren: parseInt(booking.numberOfChildren),
+                totalNumOfGuest: parseInt(booking.numberOfAdults) + parseInt(booking.numberOfChildren),
+            };
+            const confirmationCode = await bookRoom(roomId, bookingData);
             setIsSubmitted(true);
-            navigate('/', { state: { message: confirmationCode } });
+            navigate('/booking-success', { state: { success: true, message: confirmationCode } });
             console.log(`handleBooking: Booking successful. Confirmation code: ${confirmationCode}`);
         } catch (error) {
-            setErrorMessage(error.message);
-            navigate('/', { state: { message: error.message } });
-            console.error(`handleBooking error: ${error.message}`);
+            if (error.response) {
+                navigate('/booking-success', { state: { success: false, message: error.response.data } });
+                console.error(`handleBooking error: ${error.response.data}`);
+            } else {
+                navigate('/booking-success', { state: { success: false, message: error.message } });
+                console.error(`handleBooking error: ${error.message}`);
+            }
         }
-    };
+    };    
 
     return (
         <div className='container'>
