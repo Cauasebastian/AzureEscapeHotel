@@ -10,30 +10,28 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-
-
 public class RoomResponse {
     private Long id;
-    private String RoomType;
-    private BigDecimal RoomPrice;
+    private String roomType;
+    private BigDecimal roomPrice;
     private boolean isBooked;
     private String photo;
-
-    private List<BookingResponse> bookings;
+    private List<BookingResponse>bookings;
 
     public RoomResponse(Long id, String roomType, BigDecimal roomPrice) {
         this.id = id;
-        RoomType = roomType;
-        RoomPrice = roomPrice;
+        this.roomType = roomType;
+        this.roomPrice = roomPrice;
     }
 
-    public RoomResponse(Long id, String roomType, BigDecimal roomPrice, boolean isBooked, byte[] photoBytes ) {
+    public RoomResponse(Long id, String roomType, BigDecimal roomPrice, boolean isBooked,
+                        byte[] photoBytes , List<BookingResponse> bookings) {
         this.id = id;
-        RoomType = roomType;
-        RoomPrice = roomPrice;
+        this.roomType = roomType;
+        this.roomPrice = roomPrice;
         this.isBooked = isBooked;
         this.photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
-        // this.bookings = bookings;
+        this.bookings = bookings;
     }
 
 }

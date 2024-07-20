@@ -129,16 +129,12 @@ const BookingForm = () => {
             };
             const confirmationCode = await bookRoom(roomId, bookingData);
             setIsSubmitted(true);
-            navigate('/booking-success', { state: { success: true, message: confirmationCode } });
+            navigate("/booking-success", { state: { message: confirmationCode } })
             console.log(`handleBooking: Booking successful. Confirmation code: ${confirmationCode}`);
         } catch (error) {
-            if (error.response) {
-                navigate('/booking-success', { state: { success: false, message: error.response.data } });
-                console.error(`handleBooking error: ${error.response.data}`);
-            } else {
-                navigate('/booking-success', { state: { success: false, message: error.message } });
-                console.error(`handleBooking error: ${error.message}`);
-            }
+			const errorMessage = error.message
+			console.log(errorMessage)
+			navigate("/booking-success", { state: { error: errorMessage } })
         }
     };    
 

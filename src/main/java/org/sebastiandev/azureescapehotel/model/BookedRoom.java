@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.sebastiandev.azureescapehotel.model.Room;
 
 import java.time.LocalDate;
 
@@ -15,12 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookedRoom {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long bookingId;
+    private  Long bookingId;
 
     @Column(name = "check_in_date")
     private LocalDate checkInDate;
@@ -28,43 +24,43 @@ public class BookedRoom {
     @Column(name = "check_out_date")
     private LocalDate checkOutDate;
 
-    @Column(name = "guest_full_name")
+    @Column(name = "guest_fullName")
     private String guestFullName;
 
     @Column(name = "guest_email")
     private String guestEmail;
 
     @Column(name = "adults")
-    private int numOfAdults;
+    private int NumOfAdults;
 
     @Column(name = "children")
-    private int numOfChildren;
+    private int NumOfChildren;
 
     @Column(name = "total_guest")
     private int totalNumOfGuest;
 
-    @Column(name = "confirmation_code")
+    @Column(name = "confirmation_Code")
     private String bookingConfirmationCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
 
-    public BookedRoom(String bookingConfirmationCode) {
-        this.bookingConfirmationCode = bookingConfirmationCode;
-    }
-
-    public void calculateTotalNumberOfGuest() {
-        this.totalNumOfGuest = numOfAdults + numOfChildren;
+    public void calculateTotalNumberOfGuest(){
+        this.totalNumOfGuest = this.NumOfAdults + NumOfChildren;
     }
 
     public void setNumOfAdults(int numOfAdults) {
-        this.numOfAdults = numOfAdults;
+        NumOfAdults = numOfAdults;
         calculateTotalNumberOfGuest();
     }
 
     public void setNumOfChildren(int numOfChildren) {
-        this.numOfChildren = numOfChildren;
+        NumOfChildren = numOfChildren;
         calculateTotalNumberOfGuest();
+    }
+
+    public void setBookingConfirmationCode(String bookingConfirmationCode) {
+        this.bookingConfirmationCode = bookingConfirmationCode;
     }
 }
