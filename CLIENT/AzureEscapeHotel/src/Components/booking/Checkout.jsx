@@ -73,7 +73,7 @@ const Checkout = () => {
 														<FaWifi /> Wifi
 													</li>
 													<li>
-														<FaTv /> Netfilx Premium
+														<FaTv /> TV
 													</li>
 													<li>
 														<FaUtensils /> Breakfast
