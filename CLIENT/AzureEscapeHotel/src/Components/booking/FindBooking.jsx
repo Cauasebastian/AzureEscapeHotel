@@ -100,7 +100,9 @@ const FindBooking = () => {
 				</form>
 
 				{isLoading ? (
-					<div>Finding your booking...</div>
+					<div>Finding your booking...
+						<span className='spinner-border spinner-border-sm mr-2' role='status' aria-hidden='true'></span>
+					</div>
 				) : error ? (
 					<div className="text-danger">Error: {error}</div>
 				) : bookingInfo.bookingConfirmationCode ? (
@@ -132,7 +134,7 @@ const FindBooking = () => {
 						)}
 					</div>
 				) : (
-					<div>find booking...</div>
+					<div>find booking</div>
 				)}
 
 				{isDeleted && <div className="alert alert-success mt-3 fade show">{successMessage}</div>}

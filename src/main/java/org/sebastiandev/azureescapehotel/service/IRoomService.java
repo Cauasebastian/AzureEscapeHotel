@@ -8,6 +8,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 public interface IRoomService {
 
@@ -24,4 +25,6 @@ public interface IRoomService {
     Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes);
 
     Optional<Room> getRoomById(Long roomId);
+
+    List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
 }
