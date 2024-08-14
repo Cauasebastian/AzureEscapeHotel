@@ -10,14 +10,17 @@ const BookingForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [roomPrice, setRoomPrice] = useState(0);
-    const [booking, setBooking] = useState({
-        guestName: '',
-        guestEmail: '',
-        checkInDate: '',
-        checkOutDate: '',
-        numberOfAdults: '',
-        numberOfChildren: '',
-    });
+  
+    const currentUser = localStorage.getItem("userId")
+
+	const [booking, setBooking] = useState({
+		guestFullName: "",
+		guestEmail: currentUser,
+		checkInDate: "",
+		checkOutDate: "",
+		numOfAdults: "",
+		numOfChildren: ""
+	})
 
     const { roomId } = useParams();
     const navigate = useNavigate();
@@ -146,7 +149,7 @@ const BookingForm = () => {
                         <h4 className='card-title object-center'>Reservation Details</h4>
                         <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
                             <Form.Group>
-                                <Form.Label htmlFor='guestName'>Full Name</Form.Label>
+                                <Form.Label htmlFor='guestName' className="hotel-color">Full Name</Form.Label>
                                 <Form.Control required type='text' name='guestName' id='guestName' value={booking.guestName}
                                     onChange={handleInputChange}
                                     placeholder='Enter your full name' />
@@ -154,10 +157,11 @@ const BookingForm = () => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label htmlFor='guestEmail'>Email</Form.Label>
+                                <Form.Label htmlFor='guestEmail'className="hotel-color">Email</Form.Label>
                                 <Form.Control required type='email' name='guestEmail' id='guestEmail' value={booking.guestEmail}
                                     onChange={handleInputChange}
-                                    placeholder='Enter your Email' />
+                                    placeholder='Enter your Email'
+                                    disabled />
                                 <Form.Control.Feedback type='invalid'>Please enter your Email</Form.Control.Feedback>
                             </Form.Group>
 
@@ -165,13 +169,13 @@ const BookingForm = () => {
                                 <h5>Lodging period</h5>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <Form.Label htmlFor='checkInDate'>Check-in Date</Form.Label>
+                                        <Form.Label htmlFor='checkInDate' className="hotel-color">Check-in Date</Form.Label>
                                         <Form.Control required type='date' name='checkInDate' id='checkInDate' value={booking.checkInDate}
                                             onChange={handleInputChange} />
                                         <Form.Control.Feedback type='invalid'>Please enter your check-in date</Form.Control.Feedback>
                                     </div>
                                     <div className='col-6'>
-                                        <Form.Label htmlFor='checkOutDate'>Check-out Date</Form.Label>
+                                        <Form.Label htmlFor='checkOutDate' className="hotel-color">Check-out Date</Form.Label>
                                         <Form.Control required type='date' name='checkOutDate' id='checkOutDate' value={booking.checkOutDate}
                                             onChange={handleInputChange} />
                                         <Form.Control.Feedback type='invalid'>Please enter your check-out date</Form.Control.Feedback>
@@ -183,13 +187,13 @@ const BookingForm = () => {
                                 <h5>Number of guests</h5>
                                 <div className='row'>
                                     <div className='col-6'>
-                                        <Form.Label htmlFor='numberOfAdults'>Adults</Form.Label>
+                                        <Form.Label htmlFor='numberOfAdults' className="hotel-color">Adults</Form.Label>
                                         <Form.Control required type='number' name='numberOfAdults' id='numberOfAdults' value={booking.numberOfAdults}
                                             onChange={handleInputChange} min='1' placeholder='0' />
                                         <Form.Control.Feedback type='invalid'>Please select at least 1 adult.</Form.Control.Feedback>
                                     </div>
                                     <div className='col-6'>
-                                        <Form.Label htmlFor='numberOfChildren'>Children</Form.Label>
+                                        <Form.Label htmlFor='numberOfChildren'className="hotel-color">Children</Form.Label>
                                         <Form.Control required type='number' name='numberOfChildren' id='numberOfChildren' value={booking.numberOfChildren}
                                             onChange={handleInputChange} min='0' placeholder='0' />
                                         <Form.Control.Feedback type='invalid'>Please enter the number of children</Form.Control.Feedback>
