@@ -49,10 +49,10 @@ public class RoleController {
             @RequestParam("roleId") Long roleId){
         return roleService.removeUserFromRole(userId, roleId);
     }
-    @PostMapping("/assign-user-to-role")
+    @PostMapping("/assign-user-to-role/{userId}/{roleId}")
     public User assignUserToRole(
-            @RequestParam("userId") Long userId,
-            @RequestParam("roleId") Long roleId){
+            @PathVariable("userId") Long userId,
+            @PathVariable("roleId") Long roleId) {
         return roleService.assignRoleToUser(userId, roleId);
     }
 }

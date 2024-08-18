@@ -9,6 +9,7 @@ import org.sebastiandev.azureescapehotel.model.User;
 import org.sebastiandev.azureescapehotel.repository.RoleRepository;
 import org.sebastiandev.azureescapehotel.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +58,7 @@ public class RoleService implements IRoleService {
         throw new UsernameNotFoundException("User not found");
     }
 
+    @Transactional
     @Override
     public User assignRoleToUser(Long userId, Long roleId) {
         Optional<User> user = userRepository.findById(userId);
