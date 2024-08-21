@@ -7,6 +7,8 @@ import org.sebastiandev.azureescapehotel.model.Role;
 import org.sebastiandev.azureescapehotel.model.User;
 import org.sebastiandev.azureescapehotel.repository.RoleRepository;
 import org.sebastiandev.azureescapehotel.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true) // Invalida o cache quando um novo usuário é registrado
     public User registerUser(User user) {
         // Verifica se o usuário já existe no banco de dados pelo e-mail
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -57,12 +60,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Cacheable("users")
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
     @Transactional
     @Override
+    @CacheEvict(value = "users", allEntries = true) // Invalida o cache quando um usuário é deletado
     public void deleteUser(String email) {
         User theUser = getUser(email);
         if (theUser != null){
@@ -72,6 +77,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#email")
     public User getUser(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

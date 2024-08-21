@@ -8,6 +8,7 @@ class AzureEscapeHotelApplicationTests {
 
     @Test
     void contextLoads() {
+        
     }
 
 }

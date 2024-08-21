@@ -7,6 +7,9 @@ import org.sebastiandev.azureescapehotel.model.Room;
 import org.sebastiandev.azureescapehotel.repository.RoomRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +31,7 @@ public class RoomService implements IRoomService {
 
     @Override
     @Transactional
+    @CachePut(value = "rooms", key = "#room.id")
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice) {
         Room room = new Room();
         room.setRoomType(roomType);
@@ -50,16 +54,19 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    @Cacheable(value = "roomTypes")
     public List<String> getAllRoomTypes() {
         return roomRepository.findDistinctRoomType();
     }
 
     @Override
+    @Cacheable(value = "rooms")
     public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "roomPhotos", key = "#roomId")
     public byte[] getRoomPhotoByRoomId(Long roomId) throws SQLException {
         Optional<Room> room = roomRepository.findById(roomId);
         if(room.isEmpty()){
@@ -74,6 +81,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    @CacheEvict(value = "rooms", key = "#roomId")
     public void deleteRoom(Long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);
         if(room.isEmpty()){
@@ -85,6 +93,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    @CachePut(value = "rooms", key = "#roomId")
     public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with id: " + roomId));
@@ -105,10 +114,13 @@ public class RoomService implements IRoomService {
     }
 
     @Override
+    @Cacheable(value = "rooms", key = "#roomId")
     public Optional<Room> getRoomById(Long roomId) {
         return Optional.of(roomRepository.findById(roomId).get());
     }
+
     @Override
+    @Cacheable(value = "rooms")
     public List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
         return roomRepository.findAvailableRoomsByDatesAndType(checkInDate, checkOutDate, roomType);
     }
