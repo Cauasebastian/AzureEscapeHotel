@@ -7,6 +7,8 @@ import org.sebastiandev.azureescapehotel.exception.ResourceNotFoundException;
 import org.sebastiandev.azureescapehotel.model.BookedRoom;
 import org.sebastiandev.azureescapehotel.model.Room;
 import org.sebastiandev.azureescapehotel.repository.BookingRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,22 +22,26 @@ public class BookingService implements IbookingService {
 
 
     @Override
+    @Cacheable(value = "bookings")
     public List<BookedRoom> getAllBookings() {
         return bookingRepository.findAll();
     }
 
 
     @Override
+    @Cacheable(value = "bookings", key = "#email")
     public List<BookedRoom> getBookingsByUserEmail(String email) {
         return bookingRepository.findByGuestEmail(email);
     }
 
     @Override
+    @CacheEvict(value = "bookings", key = "#bookingId")
     public void cancelBooking(Long bookingId) {
         bookingRepository.deleteById(bookingId);
     }
 
     @Override
+    @Cacheable(value = "bookings", key = "#roomId")
     public List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return bookingRepository.findByRoomId(roomId);
     }
@@ -58,6 +64,7 @@ public class BookingService implements IbookingService {
     }
 
     @Override
+    @Cacheable(value = "bookings", key = "#confirmationCode")
     public BookedRoom findByBookingConfirmationCode(String confirmationCode) {
         return bookingRepository.findByBookingConfirmationCode(confirmationCode)
                 .orElseThrow(() -> new ResourceNotFoundException("No booking found with booking code :"+confirmationCode));
