@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -64,16 +65,19 @@ public class DataInitializer implements CommandLineRunner {
             userService.registerUser(user);
         }
 
-        // Verifica se já existem quartos no banco de dados
+        // Adiciona quartos ao banco de dados
         if (roomRepository.count() < 7) {
+            // Construa o caminho relativo
+            String basePath = Paths.get("assets", "hotel-rooms").toAbsolutePath().toString();
+
             // Salva 7 quartos com diferentes nomes, tipos e preços
-            saveRoom("Quarto Luxo", "Luxo", new BigDecimal("250.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image1.jpg");
-            saveRoom("Quarto Padrão", "Padrão", new BigDecimal("100.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image2.jpg");
-            saveRoom("Quarto Econômico", "Econômico", new BigDecimal("75.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image3.jpg");
-            saveRoom("Suíte Presidencial", "Presidencial", new BigDecimal("500.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image4.jpg");
-            saveRoom("Suíte Master", "Master", new BigDecimal("400.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image5.jpg");
-            saveRoom("Quarto Familiar", "Familiar", new BigDecimal("150.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image6.jpg");
-            saveRoom("Quarto Executivo", "Executivo", new BigDecimal("200.00"), "C:\\Users\\cauas\\Documents\\GitHub\\AzureEscapeHotel\\assets\\hotel-rooms\\image7.jpg");
+            saveRoom("Quarto Luxo", "Luxo", new BigDecimal("250.00"), Paths.get(basePath, "image1.jpg").toString());
+            saveRoom("Quarto Padrão", "Padrão", new BigDecimal("100.00"), Paths.get(basePath, "image2.jpg").toString());
+            saveRoom("Quarto Econômico", "Econômico", new BigDecimal("75.00"), Paths.get(basePath, "image3.jpg").toString());
+            saveRoom("Suíte Presidencial", "Presidencial", new BigDecimal("500.00"), Paths.get(basePath, "image4.jpg").toString());
+            saveRoom("Suíte Master", "Master", new BigDecimal("400.00"), Paths.get(basePath, "image5.jpg").toString());
+            saveRoom("Quarto Familiar", "Familiar", new BigDecimal("150.00"), Paths.get(basePath, "image6.jpg").toString());
+            saveRoom("Quarto Executivo", "Executivo", new BigDecimal("200.00"), Paths.get(basePath, "image7.jpg").toString());
         }
     }
 

@@ -1,4 +1,4 @@
-package org.sebastiandev.azureescapehotel.config;
+package org.sebastiandev.azureescapehotel.config.cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
