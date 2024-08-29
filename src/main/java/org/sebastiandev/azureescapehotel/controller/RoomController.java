@@ -3,7 +3,6 @@ package org.sebastiandev.azureescapehotel.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.sebastiandev.azureescapehotel.exception.PhotoRetrievalException;
 import org.sebastiandev.azureescapehotel.exception.ResourceNotFoundException;
 import org.sebastiandev.azureescapehotel.model.BookedRoom;
 import org.sebastiandev.azureescapehotel.model.Room;
@@ -32,6 +31,7 @@ import java.util.Optional;
 public class RoomController {
     private final IRoomService roomService;
     private final BookingService bookingService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping("/add/new-room")
     public ResponseEntity<RoomResponse> addNewRoom(
@@ -53,8 +53,9 @@ public class RoomController {
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws IOException {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
-        for (Room room : rooms) {
-            RoomResponse roomResponse = getRoomResponse(room);
+        for (Object room : rooms) {  // Note o uso de Object aqui para lidar com LinkedHashMap
+            Room convertedRoom = convertToRoom(room);
+            RoomResponse roomResponse = getRoomResponse(convertedRoom);
             roomResponses.add(roomResponse);
         }
         return ResponseEntity.ok(roomResponses);
@@ -75,7 +76,7 @@ public class RoomController {
                 photo.getBytes() : roomService.getRoomPhotoByRoomId(roomId);
 
         Room updatedRoom = roomService.updateRoom(roomId, roomType, roomPrice, photoBytes);
-        RoomResponse roomResponse = getRoomResponse(updatedRoom);
+        RoomResponse roomResponse = getRoomResponse(convertToRoom(updatedRoom));
         return ResponseEntity.ok(roomResponse);
     }
 
@@ -86,14 +87,10 @@ public class RoomController {
             throw new ResourceNotFoundException("Room not found with id: " + roomId);
         }
 
-        // Convertendo o LinkedHashMap para Room, se necessário
-        ObjectMapper objectMapper = new ObjectMapper();
-        Room room = objectMapper.convertValue(theroom.get(), Room.class);
-
+        Room room = convertToRoom(theroom.get());
         RoomResponse roomResponse = getRoomResponse(room);
         return ResponseEntity.ok(Optional.of(roomResponse));
     }
-
 
     @GetMapping("/available-rooms")
     public ResponseEntity<List<RoomResponse>> getAvailableRooms(
@@ -102,8 +99,9 @@ public class RoomController {
             @RequestParam("roomType") String roomType) throws IOException {
         List<Room> availableRooms = roomService.getAvailableRooms(checkInDate, checkOutDate, roomType);
         List<RoomResponse> roomResponses = new ArrayList<>();
-        for (Room room : availableRooms) {
-            RoomResponse roomResponse = getRoomResponse(room);
+        for (Object room : availableRooms) {  // Note o uso de Object aqui para lidar com LinkedHashMap
+            Room convertedRoom = convertToRoom(room);
+            RoomResponse roomResponse = getRoomResponse(convertedRoom);
             roomResponses.add(roomResponse);
         }
         if (roomResponses.isEmpty()) {
@@ -111,6 +109,14 @@ public class RoomController {
         } else {
             return ResponseEntity.ok(roomResponses);
         }
+    }
+
+    private Room convertToRoom(Object object) {
+        // Se o objeto for um LinkedHashMap, converte para Room, caso contrário, retorna o próprio objeto
+        if (object instanceof Room) {
+            return (Room) object;
+        }
+        return objectMapper.convertValue(object, Room.class);
     }
 
     private RoomResponse getRoomResponse(Room room) {
