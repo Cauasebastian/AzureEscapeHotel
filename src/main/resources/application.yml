@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     username: root
-    password: 12345678
+    password: admin
     url: jdbc:mysql://localhost:3306/AzureEscapeHotel_db
     driver-class-name: com.mysql.cj.jdbc.Driver
     redis:

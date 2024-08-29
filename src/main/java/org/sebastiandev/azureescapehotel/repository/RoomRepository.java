@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
+@org.springframework.stereotype.Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    @Query("SELECT DISTINCT r.RoomType FROM Room r")
+    @Query("SELECT DISTINCT r.roomType FROM Room r")
     List<String> findDistinctRoomType();
 
     @Query(" SELECT r FROM Room r " +
-            " WHERE r.RoomType LIKE %:roomType% " +
+            " WHERE r.roomType LIKE %:roomType% " +
             " AND r.id NOT IN (" +
             "  SELECT br.room.id FROM BookedRoom br " +
             "  WHERE ((br.checkInDate <= :checkOutDate) AND (br.checkOutDate >= :checkInDate))" +

@@ -2,25 +2,21 @@ package org.sebastiandev.azureescapehotel.config;
 
 import org.sebastiandev.azureescapehotel.model.Role;
 import org.sebastiandev.azureescapehotel.model.Room;
+import org.sebastiandev.azureescapehotel.model.RoomImage;
 import org.sebastiandev.azureescapehotel.model.User;
 import org.sebastiandev.azureescapehotel.repository.RoleRepository;
 import org.sebastiandev.azureescapehotel.repository.RoomRepository;
 import org.sebastiandev.azureescapehotel.service.UserService;
 import org.sebastiandev.azureescapehotel.utils.ImageCompressor;
-import org.sebastiandev.azureescapehotel.utils.ImageDecompressor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Paths;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -30,15 +26,13 @@ public class DataInitializer implements CommandLineRunner {
     private final RoomRepository roomRepository;
     private final RoleRepository roleRepository;
     private final ImageCompressor imageCompressor;
-    private final ImageDecompressor imageDecompressor;
 
     public DataInitializer(UserService userService, RoomRepository roomRepository, RoleRepository roleRepository,
-                           ImageCompressor imageCompressor, ImageDecompressor imageDecompressor) {
+                           ImageCompressor imageCompressor) {
         this.userService = userService;
         this.roomRepository = roomRepository;
         this.roleRepository = roleRepository;
         this.imageCompressor = imageCompressor;
-        this.imageDecompressor = imageDecompressor;
     }
 
     @Override
@@ -81,16 +75,20 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void saveRoom(String roomName, String roomType, BigDecimal roomPrice, String imagePath) throws IOException, SQLException {
+    private void saveRoom(String roomName, String roomType, BigDecimal roomPrice, String imagePath) throws IOException {
         Room room = new Room();
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
 
-        // Carrega a imagem do quarto, comprime e a converte em Blob
+        // Carrega a imagem do quarto, comprime e a converte para byte[]
         byte[] photoBytes = loadImage(imagePath);
         byte[] compressedPhotoBytes = imageCompressor.compress(photoBytes);
-        Blob photoBlob = new SerialBlob(compressedPhotoBytes);
-        room.setPhoto(photoBlob);
+
+        // Cria a entidade RoomImage e associa ao Room
+        RoomImage roomImage = new RoomImage();
+        roomImage.setImage(compressedPhotoBytes);
+        room.setRoomImage(roomImage);
+        roomImage.setRoom(room);
 
         // Salva o quarto no banco de dados
         roomRepository.save(room);
