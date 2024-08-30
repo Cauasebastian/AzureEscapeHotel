@@ -10,11 +10,14 @@ import org.sebastiandev.azureescapehotel.response.BookingResponse;
 import org.sebastiandev.azureescapehotel.response.RoomResponse;
 import org.sebastiandev.azureescapehotel.service.BookingService;
 import org.sebastiandev.azureescapehotel.service.IRoomService;
+import org.sebastiandev.azureescapehotel.utils.ImageDecompressor;
+import org.slf4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -23,6 +26,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.DataFormatException;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -32,6 +36,10 @@ public class RoomController {
     private final IRoomService roomService;
     private final BookingService bookingService;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(RoomController.class);
+    private final ImageDecompressor imageDecompressor;
+
+
 
     @PostMapping("/add/new-room")
     public ResponseEntity<RoomResponse> addNewRoom(
@@ -121,17 +129,27 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom> bookings = getAllBookingsByRoomId(room.getId());
-        List<BookingResponse> bookingInfo = bookings
-                .stream()
+        List<BookingResponse> bookingInfo = bookings.stream()
                 .map(booking -> new BookingResponse(booking.getBookingId(),
                         booking.getCheckInDate(),
-                        booking.getCheckOutDate(), booking.getBookingConfirmationCode())).toList();
+                        booking.getCheckOutDate(),
+                        booking.getBookingConfirmationCode()))
+                .toList();
 
-        byte[] photoBytes = room.getRoomImage().getImage();
-        String base64Photo = photoBytes != null ? Base64.encodeBase64String(photoBytes) : null;
+        byte[] compressedPhotoBytes = room.getRoomImage().getImage();
+        String base64Photo = null;
 
-        return new RoomResponse(room.getId(),
-                room.getRoomType(), room.getRoomPrice(),
+        if (compressedPhotoBytes != null) {
+            try {
+                byte[] photoBytes = imageDecompressor.decompress(compressedPhotoBytes);
+                base64Photo = Base64.encodeBase64String(photoBytes);
+            } catch (IOException | DataFormatException e) {
+                logger.error("Error occurred while decompressing and encoding image", e);
+                throw new RuntimeException("Failed to process image", e);
+            }
+        }
+
+        return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(),
                 room.isBooked(), base64Photo, bookingInfo);
     }
 
