@@ -1,33 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { getAllRooms } from '../Utils/ApiFunctions';
-import { Carousel } from 'react-bootstrap';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+// src/Common/RoomCarousel.js
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchRooms } from '../store/roomsSlice';
+import { Carousel, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const RoomCarousel = () => {
-  const [rooms, setRooms] = useState([{ id: "", roomType: "", roomPrice: "", photo: "" }]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { rooms, isLoading, errorMessage } = useSelector((state) => state.rooms);
 
   useEffect(() => {
-    setIsLoading(true);
-    getAllRooms()
-      .then((data) => {
-        setRooms(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setErrorMessage(error.message);
-        setIsLoading(false);
-      });
-  }, []);
+    if (rooms.length === 0) {
+      dispatch(fetchRooms());
+    }
+  }, [dispatch, rooms.length]);
 
   if (isLoading) {
     return <div className='mt-5 mb-5'>Loading...</div>;
   }
 
   if (errorMessage) {
-    return <div className='mt-5 text-danger mb-5'> Error: {errorMessage}</div>;
+    return <div className='mt-5 text-danger mb-5'>Error: {errorMessage}</div>;
   }
 
   return (
@@ -38,7 +31,7 @@ const RoomCarousel = () => {
         </Link>
         <Container>
           <Carousel indicators={false}>
-            {[...Array(Math.ceil(rooms.length / 4))].map((e, i) => (
+            {[...Array(Math.ceil(rooms.length / 4))].map((_, i) => (
               <Carousel.Item key={i}>
                 <Row>
                   {rooms.slice(i * 4, i * 4 + 4).map((room) => (
