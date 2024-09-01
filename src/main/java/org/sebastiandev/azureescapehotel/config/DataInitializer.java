@@ -7,7 +7,7 @@ import org.sebastiandev.azureescapehotel.model.User;
 import org.sebastiandev.azureescapehotel.repository.RoleRepository;
 import org.sebastiandev.azureescapehotel.repository.RoomRepository;
 import org.sebastiandev.azureescapehotel.service.UserService;
-import org.sebastiandev.azureescapehotel.utils.ImageCompressor;
+import org.sebastiandev.azureescapehotel.utils.ImageProcessor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +25,14 @@ public class DataInitializer implements CommandLineRunner {
     private final UserService userService;
     private final RoomRepository roomRepository;
     private final RoleRepository roleRepository;
-    private final ImageCompressor imageCompressor;
+    private final ImageProcessor imageProcessor;
 
     public DataInitializer(UserService userService, RoomRepository roomRepository, RoleRepository roleRepository,
-                           ImageCompressor imageCompressor) {
+                           ImageProcessor imageProcessor) {
         this.userService = userService;
         this.roomRepository = roomRepository;
         this.roleRepository = roleRepository;
-        this.imageCompressor = imageCompressor;
+        this.imageProcessor = imageProcessor;
     }
 
     @Override
@@ -80,9 +80,10 @@ public class DataInitializer implements CommandLineRunner {
         room.setRoomType(roomType);
         room.setRoomPrice(roomPrice);
 
-        // Carrega a imagem do quarto, comprime e a converte para byte[]
+        // Carrega, redimensiona e comprime a imagem do quarto
         byte[] photoBytes = loadImage(imagePath);
-        byte[] compressedPhotoBytes = imageCompressor.compress(photoBytes);
+        byte[] resizedPhotoBytes = imageProcessor.resizeImage(photoBytes);
+        byte[] compressedPhotoBytes = imageProcessor.compress(resizedPhotoBytes);
 
         // Cria a entidade RoomImage e associa ao Room
         RoomImage roomImage = new RoomImage();

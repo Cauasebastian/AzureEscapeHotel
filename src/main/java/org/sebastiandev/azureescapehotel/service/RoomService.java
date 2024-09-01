@@ -1,13 +1,11 @@
 package org.sebastiandev.azureescapehotel.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sebastiandev.azureescapehotel.exception.InternalServerException;
 import org.sebastiandev.azureescapehotel.exception.ResourceNotFoundException;
 import org.sebastiandev.azureescapehotel.model.Room;
 import org.sebastiandev.azureescapehotel.model.RoomImage;
 import org.sebastiandev.azureescapehotel.repository.RoomRepository;
-import org.sebastiandev.azureescapehotel.utils.ImageCompressor;
-import org.sebastiandev.azureescapehotel.utils.ImageDecompressor;
+import org.sebastiandev.azureescapehotel.utils.ImageProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,12 +28,11 @@ public class RoomService implements IRoomService {
 
     private final RoomRepository roomRepository;
     private static final Logger logger = LoggerFactory.getLogger(RoomService.class);
-    private final ImageCompressor imageCompressor;
-    private final ImageDecompressor imageDecompressor;
+    private final ImageProcessor imageProcessor;
 
     @Override
     @Transactional
-    @CachePut(value = "rooms", key = "#room.id")
+    @CachePut(value = "rooms", key = "#result.id")
     public Room addNewRoom(MultipartFile file, String roomType, BigDecimal roomPrice) {
         Room room = new Room();
         room.setRoomType(roomType);
@@ -44,7 +41,8 @@ public class RoomService implements IRoomService {
         if (!file.isEmpty()) {
             try {
                 byte[] photoBytes = file.getBytes();
-                byte[] compressedPhotoBytes = imageCompressor.compress(photoBytes);
+                byte[] resizedPhotoBytes = imageProcessor.resizeImage(photoBytes);
+                byte[] compressedPhotoBytes = imageProcessor.compress(resizedPhotoBytes);
 
                 RoomImage roomImage = new RoomImage();
                 roomImage.setImage(compressedPhotoBytes);
@@ -74,7 +72,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    @Cacheable(value = "roomPhotos", key = "#roomId")
+    @Cacheable(value = "rooms", key = "#roomId")
     public byte[] getRoomPhotoByRoomId(Long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);
         if (room.isEmpty()) {
@@ -84,7 +82,7 @@ public class RoomService implements IRoomService {
         byte[] compressedPhotoBytes = room.get().getRoomImage().getImage();
         if (compressedPhotoBytes != null) {
             try {
-                return imageDecompressor.decompress(compressedPhotoBytes);
+                return imageProcessor.decompress(compressedPhotoBytes);
             } catch (IOException | DataFormatException e) {
                 logger.error("Error occurred while decompressing image", e);
                 throw new RuntimeException("Failed to decompress image", e);
@@ -117,7 +115,8 @@ public class RoomService implements IRoomService {
         }
         if (photoBytes != null && photoBytes.length > 0) {
             try {
-                byte[] compressedPhotoBytes = imageCompressor.compress(photoBytes);
+                byte[] resizedPhotoBytes = imageProcessor.resizeImage(photoBytes);
+                byte[] compressedPhotoBytes = imageProcessor.compress(resizedPhotoBytes);
                 RoomImage roomImage = room.getRoomImage();
                 roomImage.setImage(compressedPhotoBytes);
             } catch (IOException e) {
